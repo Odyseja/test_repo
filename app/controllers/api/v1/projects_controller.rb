@@ -18,7 +18,7 @@ class Api::V1::ProjectsController < ApiController
 
   def update
     @project = Project.find(params[:id])
-    if @project.update_attributes(title: params[:project][:title])
+    if @project.update_attributes(name: params[:project][:name])
       render 'show', formats: [:json], handlers: [:jbuilder], status: 200
     else
       render json: {error: "Project could not be created."}, status: 422
