@@ -1,16 +1,17 @@
+require 'httparty'
+
 class MyClient
-  require 'httparty'
-  base_uri = @uri
+  include HTTParty
+    base_uri Rails.application.secrets.uri
 
   def initialize(params={})
-    @env = params[:env].blank? ? 'prod' : params[:env]
+    @env = params[:env].blank? ? 'prod' : params[:env] #prod, test
     @base_path = base_path
-    @uri = base_uri
     @key = api_key
   end
 
-  def base_uri
-    Rails.application.secrets.uri
+  def headers
+    {:headers => {"Authorization" => "Token token=#{api_key}"}}
   end
 
   def api_key
@@ -22,8 +23,9 @@ class MyClient
   end
 
   def projects
-    url = "#{base_path}/projects.json"
-    sel.class.get(url)
+    url = "#{ base_path }/projects.json"
+    #url = "http://localhost:3001/projects.json"
+    self.class.get(url, headers)
   end
 
 end
